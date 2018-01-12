@@ -2,7 +2,7 @@
 # coding=utf-8
 # This file is part of TVHeadend Script Guida TV
 #
-# Copyright(c) 2017 Stefano Mastrodomenico
+# Copyright(c) 2017 Gitner S.M.
 #
 # This script takes over a part of the code 
 # written by Mathias F. Svendsen - okey.dk
@@ -21,11 +21,7 @@
 # or write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
-import io
-import os
-import gzip
-import StringIO
-from urllib2 import urlopen
+import subprocess
 from optparse import OptionParser
 
 parser = OptionParser(version="%prog 1.0b")
@@ -34,22 +30,12 @@ parser.add_option("-c","--capabilities", dest="capabilities", action="store_true
 (options, args) = parser.parse_args()
 
 if options.description is False and options.capabilities is False:
-  url = "http://rytecepg.ipservers.eu/epg_data/rytecIT_Basic.gz"
-    
-  # Scarico il file GZ
-  gzFile = urlopen(url)
-  compressedFile = StringIO.StringIO()
-  compressedFile.write(gzFile.read())
-  
-  # Imposto la posizione corrente del file
-  # all'inizio in modo che gzip.GzipFile possa
-  # leggere il contenuto dal principio
-  compressedFile.seek(0)
 
-  # Decomprimo il file GZ    
-  decompressedFile = gzip.GzipFile(fileobj=compressedFile, mode='rb')
-  file_content = decompressedFile.read()
+  # Obtain xml file xml extracting xz archive by shell
+  xmltv = subprocess.Popen("wget -qO- http://rytecepg.ipservers.eu/epg_data/rytecIT_Basic.xz | xz -cd", stdout=subprocess.PIPE, shell=True)
+  file_content = xmltv.stdout.read()
 
+  # Print xml output
   print (file_content)
 elif options.description is True:
     print ("TV Italy Basic Grab by URL")
