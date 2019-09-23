@@ -32,7 +32,7 @@ parser.add_option("-c","--capabilities", dest="capabilities", action="store_true
 if options.description is False and options.capabilities is False:
 
   # Obtain xml file xml extracting xz archive by shell
-  xmltv = subprocess.Popen("wget -qO- http://rytecepg.ipservers.eu/epg_data/rytecIT_Basic.xz | xz -cd", stdout=subprocess.PIPE, shell=True)
+  xmltv = subprocess.Popen("wget -qO- http://rytecepg.epgspot.com/epg_data/rytecIT_Basic.xz | xz -cd", stdout=subprocess.PIPE, shell=True)
   file_content = xmltv.stdout.read()
 
   # Print xml output
